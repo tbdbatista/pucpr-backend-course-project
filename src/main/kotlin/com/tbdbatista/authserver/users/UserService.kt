@@ -5,6 +5,7 @@ import com.tbdbatista.authserver.roles.RoleRepository
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
@@ -23,6 +24,8 @@ class UserService(
         SortDir.DESC -> repository.findAll(Sort.by("name").descending())
     }
 
+    fun findByRole(roleName: String) = repository.findByRole(roleName)
+
     fun findByIdOrNull(id: Long) = repository.findByIdOrNull(id)
 
     fun delete(id: Long): Boolean {
@@ -31,6 +34,7 @@ class UserService(
         return true
     }
 
+    @Transactional
     fun addRole(id: Long, roleName: String): Boolean? {
         val role = roleName.uppercase()
         val user = repository.findByIdOrNull(id) ?: return null
